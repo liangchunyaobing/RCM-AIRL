@@ -147,14 +147,14 @@ if __name__ == '__main__':
     eval_batch_size = 8192  # 8192  # minimal batch size for evaluation (default: 2048)
     log_interval = 10  # interval between training status logs (default: 10)
     save_mode_interval = 50  # interval between saving model (default: 0, means don't save)
-    max_grad_norm = 10
-    seed = 1
+    max_grad_norm = 10 # max grad norm for ppo updates
+    seed = 1 # random seed for parameter initialization
     epoch_disc = 1  # optimization epoch number for discriminator
     optim_epochs = 10  # optimization epoch number for PPO
     optim_batch_size = 64  # optimization batch size for PPO
     cv = 0  # cross validation process [0, 1, 2, 3, 4]
-    size = 10000  # size of training data [100, 1000, 10000]
-    max_iter_num = 11  # maximal number of main iterations {100size: 1000, 1000size: 2000, 10000size: 3000}
+    size = 100  # size of training data [100, 1000, 10000]
+    max_iter_num = 1000  # maximal number of main iterations {100size: 1000, 1000size: 2000, 10000size: 3000}
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     """environment"""

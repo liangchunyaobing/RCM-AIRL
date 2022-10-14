@@ -4,19 +4,15 @@ import numpy as np
 from utils.load_data import load_path_feature, load_link_feature, minmax_normalization, load_test_traj
 from utils.evaluation import evaluate_model, evaluate_log_prob
 from network_env import RoadWorld
-from model.policy import PolicyCNN, PolicyBC
+from model.policy import PolicyCNN
 
 if __name__ == '__main__':
     learning_rate = 1e-3
-    gamma = 0.5
-    n_iters = 500
-    hidden = 128
-    batch_size = 32
-    batch_size_test = 128
-    embed_dim = 64
-    max_length = 50
-    cv = 0
-    size = 100
+    n_iters = 500  # number of training iterations
+    batch_size = 32  # training batch size
+    max_length = 50  # maximum path length for recursively generating next link until destination is reached
+    cv = 0  # cross validation process [0, 1, 2, 3, 4]
+    size = 100  # # size of training data [100, 1000, 10000]
     max_iter_num = 500
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
@@ -40,6 +36,7 @@ if __name__ == '__main__':
     """initiate model"""
     CNNMODEL = PolicyCNN(env.n_actions, env.policy_mask, env.state_action, path_feature_pad, edge_feature_pad,
                          path_feature_pad.shape[-1] + edge_feature_pad.shape[-1] + 1, env.pad_idx).to(device)
+    CNNMODEL.to_device(device)
     criterion = torch.nn.NLLLoss()
     optimizer = torch.optim.Adam(CNNMODEL.parameters(), lr=learning_rate)
     """load train data"""
@@ -61,7 +58,7 @@ if __name__ == '__main__':
             sampled_x_state_train = x_state_train[i:batch_right]
             sampled_x_des_train = x_des_train[i:batch_right]
             sampled_y_train = y_train[i:batch_right].contiguous().view(-1)
-            y_est = torch.log(CNNMODEL.get_action_prob(sampled_x_state_train, sampled_x_des_train))
+            y_est = CNNMODEL.get_action_log_prob(sampled_x_state_train, sampled_x_des_train)
             loss = criterion(y_est.view(-1, y_est.size(1)), sampled_y_train)
             optimizer.zero_grad()
             loss.backward()

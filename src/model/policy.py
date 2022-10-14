@@ -60,6 +60,13 @@ class PolicyCNN(nn.Module):
         x = x.masked_fill((1 - x_mask).bool(), -1e32)
         return F.softmax(x, dim=1)
 
+    def get_action_log_prob(self, state, des):
+        x = self.process_features(state, des)
+        x = self.forward(x)
+        x_mask = self.policy_mask[state]  # [batch, 8]
+        x = x.masked_fill((1 - x_mask).bool(), -1e32)
+        return F.log_softmax(x, dim=1)
+
     def select_action(self, state, des):
         action_prob = self.get_action_prob(state, des)
         action = torch.distributions.Categorical(action_prob).sample()

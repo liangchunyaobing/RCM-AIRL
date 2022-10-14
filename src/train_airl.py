@@ -134,7 +134,7 @@ if __name__ == '__main__':
     log_std = -0.0  # log std for the policy
     gamma = 0.99  # discount factor
     tau = 0.95  # gae
-    l2_reg = 1e-3  # l2 regularization regression
+    l2_reg = 1e-3  # l2 regularization regression (not used in the model)
     learning_rate = 3e-4  # learning rate for both discriminator and generator
     clip_epsilon = 0.2  # clipping epsilon for PPO
     num_threads = 4  # number of threads for agent
@@ -142,8 +142,8 @@ if __name__ == '__main__':
     eval_batch_size = 8192  # 8192  # minimal batch size for evaluation
     log_interval = 10  # interval between training status logs
     save_mode_interval = 50  # interval between saving model
-    max_grad_norm = 10
-    seed = 1
+    max_grad_norm = 10  # max grad norm for ppo updates
+    seed = 1  # random seed for parameter initialization
     epoch_disc = 1  # optimization epoch number for discriminator
     optim_epochs = 10  # optimization epoch number for PPO
     optim_batch_size = 64  # optimization batch size for PPO
