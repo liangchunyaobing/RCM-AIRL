@@ -10,8 +10,10 @@ for Route Choice Modeling. arXiv preprint arXiv:2206.10598.
   The data used in this research is available and can be found in data (insert link here)
   
 # How to run
-  RCM-BC: run train_bc.py 
+  RCM-BC: run train_bc.py
+  
   RCM-GAIL: run train_gail.py
+  
   RCM-AIRL: run train_airl.py
 
 
